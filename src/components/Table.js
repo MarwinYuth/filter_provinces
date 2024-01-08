@@ -2,15 +2,17 @@ import { useState } from "react"
 import { Modal } from "./Modal"
 import { data } from "autoprefixer"
 
-export const Table = ({data,onDelete}) => {
+export const Table = ({data,onDelete,districts}) => {
 
     const [popUp,setPopUp] = useState(false)
 
     const [viewEdit,setViewEdit] = useState()
 
     const onClickDelete = (provinceId) => {
+        console.log(districts);
 
         onDelete(prev => prev.filter(data => data.id !== provinceId))
+        districts.splice(0,1)
         
     }
 

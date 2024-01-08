@@ -153,8 +153,7 @@ export default function Home() {
       <CommunesForm provinces={provinces} districts={districts} onSave={onSaveCommune}/>
       <VillageForm communes={communes} provinces={provinces} districts={districts} onSave={onSaveVillage}/>
 
-      {/* Province_Table */}
-      <Table data={data} onDelete={setData} />
+      <Table data={data} onDelete={setData} districts={districts}/>
 
       <ReuseableTable label='District Data' data={districts} onDelete={setDistricts}/>
 
