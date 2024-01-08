@@ -28,8 +28,6 @@ export const Modal = ({data,onChangePopUp,isVisible}) => {
         onChangePopUp(false)
     }
 
-    console.log(data);
-
     return(
 
         <div onClick={() => onChangePopUp(false)} className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">

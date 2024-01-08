@@ -8,10 +8,10 @@ export const Table = ({data,onDelete}) => {
 
     const [viewEdit,setViewEdit] = useState()
 
-    const onClickDelete = (data_id) => {
+    const onClickDelete = (provinceId) => {
 
-        onDelete(prev => prev.filter(data => data.id !== data_id))
-
+        onDelete(prev => prev.filter(data => data.id !== provinceId))
+        
     }
 
     const onEdit = (provinceId) => {
@@ -19,6 +19,8 @@ export const Table = ({data,onDelete}) => {
 
         setPopUp(true)
         setViewEdit(provinceData.provinces)
+
+        console.log(provinceData.provinces);
     }
 
     return(

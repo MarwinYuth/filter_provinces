@@ -7,7 +7,7 @@ import { CommunesForm } from '@/components/CommunesForm'
 import { VillageForm } from '@/components/VillageForm'
 import { Table } from '@/components/Table'
 import { data } from 'autoprefixer'
-import { DistrictTable } from '@/components/DistrictTable'
+import { DistrictTable, ReuseableTable } from '@/components/ReuseableTable'
 
 export default function Home() {
   const [selectProvinceId,setSelectProvinceId] = useState(null)
@@ -141,11 +141,7 @@ export default function Home() {
 
   const onSelectProvince = (e) => {
     
-    const provinceId = e.target.value
-
-    setDistricts(districts.filter(dis => dis.province_id === provinceId))
-
-    console.log(districts.filter(dis => dis.province_id === provinceId));
+    console.log(districts);
   }
 
   return (
@@ -160,13 +156,17 @@ export default function Home() {
       {/* Province_Table */}
       <Table data={data} onDelete={setData} />
 
-      <DistrictTable />
+      <ReuseableTable label='District Data' data={districts} onDelete={setDistricts}/>
 
-      
+      <ReuseableTable label='Communes Data' data={communes} onDelete={setCommunes}/>
+
+      <ReuseableTable label='Villages Data' data={villages} onDelete={setVillages}/>
+
+      <div className='h-[50px]'></div>
       <button className='mt-8 bg-pink-500 p-4'>Test Button</button>
 
 
-      <button onClick={onSelectProvince} className='mt-8 ml-4 bg-pink-500 p-4'>Test filter </button>
+      // <button onClick={onSelectProvince} className='mt-8 ml-4 bg-pink-500 p-4'>Test filter </button>
     
     </div>
 
