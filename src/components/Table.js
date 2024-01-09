@@ -2,27 +2,23 @@ import { useState } from "react"
 import { Modal } from "./Modal"
 import { data } from "autoprefixer"
 
-export const Table = ({data,onDelete,districts}) => {
+export const Table = ({data,onDelete}) => {
 
     const [popUp,setPopUp] = useState(false)
 
     const [viewEdit,setViewEdit] = useState()
 
-    const onClickDelete = (provinceId) => {
-        console.log(districts);
-
-        onDelete(prev => prev.filter(data => data.id !== provinceId))
-        districts.splice(0,1)
+    // const onClickDelete = (provinceId) => {
+    //     onDelete(prev => prev.filter(data => data.id !== provinceId))
+    //     districts.splice(0,1)
         
-    }
+    // }
 
     const onEdit = (provinceId) => {
         const provinceData = data.find(data => data.id === provinceId)
 
         setPopUp(true)
         setViewEdit(provinceData.provinces)
-
-        console.log(provinceData.provinces);
     }
 
     return(
@@ -75,7 +71,7 @@ export const Table = ({data,onDelete,districts}) => {
                                         {data?.totalVillages}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <a className="text-blue-500 font-bold" onClick={() => onEdit(data.id)}>Edit</a> / <a onClick={() => onClickDelete(data.id)} className="text-red-600 font-bold">Delete</a>
+                                        <a className="text-blue-500 font-bold cursor-pointer" onClick={() => onEdit(data.id)}>Edit</a> / <a onClick={() => onDelete(data.id)} className="text-red-600 font-bold cursor-pointer">Delete</a>
                                     </td>
                                 </tr>
                             )

@@ -109,39 +109,47 @@ export default function Home() {
   }
 
   const onSaveVillage = (param) => {
+    const id = uuidv4();
 
-    const id = uuidv4()
+    const districtId = communes.find(com => com.id === param.commune_id)?.district_id;
+    const provinceId = districts.find(dis => dis.id === districtId)?.province_id;
 
-    setVillages(prev => {
-      prev.push({
-        id:id,
-        ...param
-      })
-      return prev
-    })
+    const updatedData = data.map((pro) => {
+        if (pro.provinces?.id === provinceId) {
+            pro.totalVillages = pro.totalVillages + 1;
+        }
+        return pro;
+    });
 
-    const result = data.map((pro,index) => {
+    const updatedVillages = [...villages, {
+      id: id,
+      ...param
+    }];
 
-      const districtId = communes.find(com => com.id === param.commune_id).district_id
-
-      const provinceId = districts.find(dis => dis.id === districtId).province_id
-
-      if(pro.provinces?.id === provinceId){
-
-        pro.totalVillages = pro.totalVillages + 1
-      }
-
-      return pro
-
-    })
-
-    setData(result)
-
+    setVillages(updatedVillages);
+    setData(updatedData);
   }
 
-  const onSelectProvince = (e) => {
+
+  const onDelete = (param) => {
+    const provinceData = data.find(data => data.id === param)
+    setData(data.filter(data => data.id !== param))   
+    setDistricts(districts.filter(dis => dis.province_id !== provinceData.provinces.id));
+
+    const districtData = districts.find(dis => dis.province_id === provinceData.provinces.id)
+    setCommunes(communes.filter(com => com.district_id !== districtData.id))
     
-    console.log(districts);
+    const communeData = communes.find(com => com.district_id === districtData.id)
+    setVillages(villages.filter(vill => vill.commune_id !== communeData.id))
+  }
+
+
+  const testButton = () => {
+
+    console.log(provinces);
+
+    console.log(data);
+
   }
 
   return (
@@ -153,7 +161,7 @@ export default function Home() {
       <CommunesForm provinces={provinces} districts={districts} onSave={onSaveCommune}/>
       <VillageForm communes={communes} provinces={provinces} districts={districts} onSave={onSaveVillage}/>
 
-      <Table data={data} onDelete={setData} districts={districts}/>
+      <Table data={data} onDelete={onDelete}/>
 
       <ReuseableTable label='District Data' data={districts} onDelete={setDistricts}/>
 
@@ -162,10 +170,10 @@ export default function Home() {
       <ReuseableTable label='Villages Data' data={villages} onDelete={setVillages}/>
 
       <div className='h-[50px]'></div>
-      <button className='mt-8 bg-pink-500 p-4'>Test Button</button>
+      <button onClick={testButton} className='mt-8 bg-pink-500 p-4'>Test Button</button>
 
 
-      // <button onClick={onSelectProvince} className='mt-8 ml-4 bg-pink-500 p-4'>Test filter </button>
+      
     
     </div>
 
