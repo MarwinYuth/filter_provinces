@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "./Input";
 
-export const Modal = ({data,onChangePopUp,isVisible,onUpdate}) => {
+export const Modal = ({label,data,onChangePopUp,isVisible}) => {
 
     if(!isVisible){
         return null
@@ -34,14 +34,14 @@ export const Modal = ({data,onChangePopUp,isVisible,onUpdate}) => {
 
             <div onClick={protectModal} className="bg-gray-600 p-8 text-center rounded-lg">
                 
-                <h1 className="text-white font-bold text-[30px]">Modify Provinces</h1>
+                <h1 className="text-white font-bold text-[30px]">Modify {label}</h1>
 
                 <div>
 
                     <Input label='Name' value={form.name} name='name' onChange={onChange}/> 
                     <Input label='Name Km' value={form.name_km} name='name_km' onChange={onChange}/> 
                     
-                    <button onClick={() => onUpdate(form)} className="bg-black mt-4 p-4 rounded-lg font-bold">Edit</button>     
+                    <button onClick={onEdit} className="bg-black mt-4 p-4 rounded-lg font-bold">Edit</button>     
 
                 </div>
 

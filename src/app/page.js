@@ -7,20 +7,16 @@ import { CommunesForm } from '@/components/CommunesForm'
 import { VillageForm } from '@/components/VillageForm'
 import { Table } from '@/components/Table'
 import { data } from 'autoprefixer'
-import { DistrictTable, ReuseableTable } from '@/components/ReuseableTable'
+import { ReuseableTable } from '@/components/ReuseableTable'
 import { Modal } from '@/components/Modal'
 
 export default function Home() {
   const [selectProvinceId,setSelectProvinceId] = useState(null)
 
-  const [popUp,setPopUp] = useState(false)
-  const [viewDetail,setViewDetail] = useState()
-
   const [provinces,setProvinces] = useState([])
   const [districts,setDistricts] = useState([])
   const [communes,setCommunes] = useState([])
   const [villages,setVillages] = useState([])
-  // const [data,setData] = useState([])
 
   // useEffect(() => {
 
@@ -150,11 +146,7 @@ export default function Home() {
     // console.log(param);
 
     const provinceId = param.province.id
-
     setProvinces(prev => prev.filter(pro => pro.id !== provinceId))
-
-    // const provinceData = provinces.find(pro => pro.id === param)
-    // setProvinces(provinces.filter(pro => pro.id !== provinceData.id));
   
     setDistricts(districts.filter(dis => dis.province_id !== provinceId));
 
@@ -165,18 +157,6 @@ export default function Home() {
     setVillages(villages.filter(vill => vill.commune_id !== communeData.id))
   }
 
-  const onViewEdit = (data) => {
-    setPopUp(true)
-    setViewDetail(data)
-    console.log(data);
-  }
-
-  const onUpdate = (param) => {
-
-    console.log(param);
-    
-  }
-
 
   const testButton = () => {
 
@@ -185,6 +165,8 @@ export default function Home() {
     console.log(districts);
 
     console.log(communes);
+
+    console.log(villages)
 
   }
 
@@ -197,9 +179,9 @@ export default function Home() {
       <CommunesForm provinces={provinces} districts={districts} onSave={onSaveCommune}/>
       <VillageForm communes={communes} provinces={provinces} districts={districts} onSave={onSaveVillage}/>
 
-      <Table data={data} onDelete={onDelete}  onEdit={onViewEdit}/>
+      <Table data={data} onDelete={onDelete} />
 
-      <ReuseableTable label='District Data' data={districts} onEdit={onViewEdit} onDelete={setDistricts}/>
+      <ReuseableTable label='District Data' data={districts} onDelete={setDistricts}/>
 
       <ReuseableTable label='Communes Data' data={communes} onDelete={setCommunes}/>
 
@@ -209,7 +191,7 @@ export default function Home() {
       <button onClick={testButton} className='mt-8 bg-pink-500 p-4'>Test Button</button>
 
 
-      <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp} onUpdate={onUpdate}/>
+      {/* <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp} onUpdate={onUpdate}/> */}
     
     </div>
 

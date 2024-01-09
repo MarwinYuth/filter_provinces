@@ -3,18 +3,15 @@ import { Modal } from "./Modal"
 import { data } from "autoprefixer"
 
 
-export const ReuseableTable = ({label,data,onEdit}) => {
+export const ReuseableTable = ({label,data}) => {
 
-    // const [popUp,setPopUp] = useState(false)
-    // const [viewDetail,setViewDetail] = useState()
+    const [popUp,setPopUp] = useState(false)
+    const [viewDetail,setViewDetail] = useState()
 
-    // const onEdit = (dataId) => {
-
-    //     const viewDetail = data.filter(dis => dis.id === dataId)
-
-    //     setPopUp(true)
-    //     setViewDetail(viewDetail[0])
-    // }
+    const onEdit = (data) => {
+        setPopUp(true)
+        setViewDetail(data)
+    }
 
     // const onClickDelete = (dataId) => {
         
@@ -66,7 +63,7 @@ export const ReuseableTable = ({label,data,onEdit}) => {
                 </tbody>
             </table>
             
-            {/* <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp}/> */}
+            <Modal label={label} data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp}/>
 
         </div>
 
