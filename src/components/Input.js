@@ -35,8 +35,6 @@ export const SelectInput = ({label,name,value,placeholder,options = [],onChange}
              {
                 options.map((option) => <option value={option.id}>{option.name}</option>)
              }
-            
-
             </select>
 
         </div>

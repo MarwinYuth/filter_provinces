@@ -19,6 +19,9 @@ export const ProvinceForm = ({onSave,onEdit}) => {
 
     const onClickSave = () => {
 
+        if(form.name === '' || form.name_km === ''){
+            return null
+        }
         onSave(form)
 
         setForm({name:'',name_km:''})

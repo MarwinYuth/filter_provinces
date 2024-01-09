@@ -16,6 +16,10 @@ export const DistrictForm = ({onSave,provinces}) => {
     }
 
     const onClickSave = () => {
+        if(form.province_id === '' || form.name === '' || form.name_km === ''){
+            alert('Fill all the form')
+            return null
+        }
         onSave(form)
 
         setForm({province_id:'',name:'',name_km:''})

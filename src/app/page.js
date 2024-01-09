@@ -1,6 +1,6 @@
 "use client"
 import { ProvinceForm } from '@/components/ProvineceForm'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { uuidv4 } from '@/utils'
 import { DistrictForm } from '@/components/DistrictForm'
 import { CommunesForm } from '@/components/CommunesForm'
@@ -8,42 +8,18 @@ import { VillageForm } from '@/components/VillageForm'
 import { Table } from '@/components/Table'
 import { data } from 'autoprefixer'
 import { ReuseableTable } from '@/components/ReuseableTable'
-import { Modal } from '@/components/Modal'
 
 export default function Home() {
-  const [selectProvinceId,setSelectProvinceId] = useState(null)
 
   const [provinces,setProvinces] = useState([])
   const [districts,setDistricts] = useState([])
   const [communes,setCommunes] = useState([])
   const [villages,setVillages] = useState([])
 
-  // useEffect(() => {
-
-  //   if(provinces.length === 0){
-  //     return
-  //   }
-
-  //   setData(prev => {
-  //     const id = uuidv4()
-
-  //     return[
-  //       ...prev,
-  //       {
-  //         id:id,
-  //         provinces:provinces.find(province => province.id === selectProvinceId),
-  //         totalDistricts:0,
-  //         totalCommunes:0,
-  //         totalVillages:0
-  //       }
-  //     ]
-  //   })
-
-  // },[provinces])
-
   const data = useMemo(() => {
 
     const id = uuidv4();
+
     return provinces.map((province) => {
 
       const districtResults = districts.filter(
@@ -142,9 +118,7 @@ export default function Home() {
   }
 
 
-  const onDelete = (param) => {
-    // console.log(param);
-
+  const onDeleteProvince = (param) => {
     const provinceId = param.province.id
     setProvinces(prev => prev.filter(pro => pro.id !== provinceId))
   
@@ -155,6 +129,28 @@ export default function Home() {
     
     const communeData = communes.find(com => com.district_id === districtData.id)
     setVillages(villages.filter(vill => vill.commune_id !== communeData.id))
+  }
+
+  const onDeleteDistrict = (param) => {
+    const districtId = param
+    setDistricts(prev => prev.filter(dis => dis.id !== districtId))
+
+    setCommunes(prev => prev.filter(com => com.district_id !== districtId))
+    const communeData = communes.find(com => com.district_id === districtId)
+
+    setVillages(prev => prev.filter(vil => vil.commune_id !== communeData.id))
+  }
+
+  const onDeleteCommune = (param) => {
+    const communeId = param
+
+    setCommunes(prev => prev.filter(com => com.id !== communeId))
+    setVillages(prev => prev.filter(vil => vil.commune_id !== communeId))
+  }
+
+  const onDeleteVillage = (param) => {
+    const villageId = param
+    setVillages(prev => prev.filter(vil => vil.id !== villageId))
   }
 
 
@@ -179,17 +175,16 @@ export default function Home() {
       <CommunesForm provinces={provinces} districts={districts} onSave={onSaveCommune}/>
       <VillageForm communes={communes} provinces={provinces} districts={districts} onSave={onSaveVillage}/>
 
-      <Table data={data} onDelete={onDelete} />
+      <Table data={data} onDelete={onDeleteProvince} />
 
-      <ReuseableTable label='District Data' data={districts} onDelete={setDistricts}/>
+      <ReuseableTable label='District Data' data={districts} onDelete={onDeleteDistrict}/>
 
-      <ReuseableTable label='Communes Data' data={communes} onDelete={setCommunes}/>
+      <ReuseableTable label='Communes Data' data={communes} onDelete={onDeleteCommune}/>
 
-      <ReuseableTable label='Villages Data' data={villages} onDelete={setVillages}/>
+      <ReuseableTable label='Villages Data' data={villages} onDelete={onDeleteVillage}/>
 
-      <div className='h-[50px]'></div>
       <button onClick={testButton} className='mt-8 bg-pink-500 p-4'>Test Button</button>
-
+      <div className='h-[50px]'></div>
 
       {/* <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp} onUpdate={onUpdate}/> */}
     
