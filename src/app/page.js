@@ -1,6 +1,6 @@
 "use client"
 import { ProvinceForm } from '@/components/ProvineceForm'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { uuidv4 } from '@/utils'
 import { DistrictForm } from '@/components/DistrictForm'
 import { CommunesForm } from '@/components/CommunesForm'
@@ -8,38 +8,76 @@ import { VillageForm } from '@/components/VillageForm'
 import { Table } from '@/components/Table'
 import { data } from 'autoprefixer'
 import { DistrictTable, ReuseableTable } from '@/components/ReuseableTable'
+import { Modal } from '@/components/Modal'
 
 export default function Home() {
   const [selectProvinceId,setSelectProvinceId] = useState(null)
+
+  const [popUp,setPopUp] = useState(false)
+  const [viewDetail,setViewDetail] = useState()
 
   const [provinces,setProvinces] = useState([])
   const [districts,setDistricts] = useState([])
   const [communes,setCommunes] = useState([])
   const [villages,setVillages] = useState([])
-  const [data,setData] = useState([])
+  // const [data,setData] = useState([])
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if(provinces.length === 0){
-      return
-    }
+  //   if(provinces.length === 0){
+  //     return
+  //   }
 
-    setData(prev => {
-      const id = uuidv4()
+  //   setData(prev => {
+  //     const id = uuidv4()
 
-      return[
-        ...prev,
-        {
-          id:id,
-          provinces:provinces.find(province => province.id === selectProvinceId),
-          totalDistricts:0,
-          totalCommunes:0,
-          totalVillages:0
-        }
-      ]
-    })
+  //     return[
+  //       ...prev,
+  //       {
+  //         id:id,
+  //         provinces:provinces.find(province => province.id === selectProvinceId),
+  //         totalDistricts:0,
+  //         totalCommunes:0,
+  //         totalVillages:0
+  //       }
+  //     ]
+  //   })
 
-  },[provinces])
+  // },[provinces])
+
+  const data = useMemo(() => {
+
+    const id = uuidv4();
+    return provinces.map((province) => {
+
+      const districtResults = districts.filter(
+        (district) => district.province_id === province.id
+      );
+
+      const communeResults = communes.filter((commune) =>
+        districtResults.filter(
+          (district) => district.id === commune.district_id
+        )
+      );
+
+      const totalVillage = villages.filter((vil) =>
+        communeResults.find((com) => com.id === vil.commune_id)
+      );
+
+      const result = {
+        id: id,
+        province,
+        totalDistricts: districtResults.length,
+        totalCommunes: communeResults.length,
+        totalVillages: totalVillage.length,
+      };
+
+      return result;
+    });
+
+  }, [provinces, districts, communes, villages]);
+
+  console.log(provinces);
 
   const onSaveProvince = (param) => {
 
@@ -53,7 +91,6 @@ export default function Home() {
       return prev
     })
 
-    setSelectProvinceId(id)
     setProvinces([...provinces])
   }
 
@@ -65,82 +102,79 @@ export default function Home() {
       return [
         ...pre,
         {
-          ...param,
           id: id,
+          ...param,
         },
       ];
     });
 
-    const result = data.map((pro, index) => {
-      if (pro.provinces?.id === param.province_id) {
-        pro.totalDistricts = pro.totalDistricts + 1;
-      }
-      return pro;
-    });
-    setData(result);
-
+    setDistricts(prev => [...prev])
+    console.log(districts);
   }
 
   const onSaveCommune = (param) => {
     const id = uuidv4()
 
-    const result = data.map((pro,index) => {
-
-      const provinceId = districts.find(dis => dis.id === param.district_id).province_id
-
-      if(pro.provinces?.id === provinceId){
-        pro.totalCommunes = pro.totalCommunes + 1
-      }
-
-      return(pro)
-    })
 
     setCommunes(prev => {
-      return [
-        ...prev,
-        {
-          id:id,
-          ...param
-        }
-      ]
-    })
 
-    setData(result)
+      prev.push({
+        id:id,
+        ...param
+      })
+
+      return prev
+
+    })
+    console.log(communes)
+    setCommunes([...communes])
   }
 
   const onSaveVillage = (param) => {
     const id = uuidv4();
 
-    const districtId = communes.find(com => com.id === param.commune_id)?.district_id;
-    const provinceId = districts.find(dis => dis.id === districtId)?.province_id;
+    setVillages(prev => {
+      prev.push({
+        id:id,
+        ...param
+      })
 
-    const updatedData = data.map((pro) => {
-        if (pro.provinces?.id === provinceId) {
-            pro.totalVillages = pro.totalVillages + 1;
-        }
-        return pro;
-    });
+      return prev
+    })
 
-    const updatedVillages = [...villages, {
-      id: id,
-      ...param
-    }];
-
-    setVillages(updatedVillages);
-    setData(updatedData);
+    setVillages([...villages])
   }
 
 
   const onDelete = (param) => {
-    const provinceData = data.find(data => data.id === param)
-    setData(data.filter(data => data.id !== param))   
-    setDistricts(districts.filter(dis => dis.province_id !== provinceData.provinces.id));
+    // console.log(param);
 
-    const districtData = districts.find(dis => dis.province_id === provinceData.provinces.id)
+    const provinceId = param.province.id
+
+    setProvinces(prev => prev.filter(pro => pro.id !== provinceId))
+
+    // const provinceData = provinces.find(pro => pro.id === param)
+    // setProvinces(provinces.filter(pro => pro.id !== provinceData.id));
+  
+    setDistricts(districts.filter(dis => dis.province_id !== provinceId));
+
+    const districtData = districts.find(dis => dis.province_id === provinceId)
     setCommunes(communes.filter(com => com.district_id !== districtData.id))
     
     const communeData = communes.find(com => com.district_id === districtData.id)
     setVillages(villages.filter(vill => vill.commune_id !== communeData.id))
+  }
+
+  const onViewEdit = (data) => {
+    setPopUp(true)
+    setViewDetail(data)
+    console.log(data);
+  }
+
+  const onUpdate = (param) => {
+
+    console.log(param);
+    
   }
 
 
@@ -148,7 +182,9 @@ export default function Home() {
 
     console.log(provinces);
 
-    console.log(data);
+    console.log(districts);
+
+    console.log(communes);
 
   }
 
@@ -161,9 +197,9 @@ export default function Home() {
       <CommunesForm provinces={provinces} districts={districts} onSave={onSaveCommune}/>
       <VillageForm communes={communes} provinces={provinces} districts={districts} onSave={onSaveVillage}/>
 
-      <Table data={data} onDelete={onDelete}/>
+      <Table data={data} onDelete={onDelete}  onEdit={onViewEdit}/>
 
-      <ReuseableTable label='District Data' data={districts} onDelete={setDistricts}/>
+      <ReuseableTable label='District Data' data={districts} onEdit={onViewEdit} onDelete={setDistricts}/>
 
       <ReuseableTable label='Communes Data' data={communes} onDelete={setCommunes}/>
 
@@ -173,7 +209,7 @@ export default function Home() {
       <button onClick={testButton} className='mt-8 bg-pink-500 p-4'>Test Button</button>
 
 
-      
+      <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp} onUpdate={onUpdate}/>
     
     </div>
 

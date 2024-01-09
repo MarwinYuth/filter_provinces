@@ -3,24 +3,23 @@ import { Modal } from "./Modal"
 import { data } from "autoprefixer"
 
 
-export const ReuseableTable = ({label,data,onDelete}) => {
+export const ReuseableTable = ({label,data,onEdit}) => {
 
-    const [popUp,setPopUp] = useState(false)
-    const [viewDetail,setViewDetail] = useState()
+    // const [popUp,setPopUp] = useState(false)
+    // const [viewDetail,setViewDetail] = useState()
 
-    const onEdit = (dataId) => {
+    // const onEdit = (dataId) => {
 
-        const viewDetail = data.filter(dis => dis.id === dataId)
+    //     const viewDetail = data.filter(dis => dis.id === dataId)
 
-        setPopUp(true)
-        setViewDetail(viewDetail[0])
-    }
+    //     setPopUp(true)
+    //     setViewDetail(viewDetail[0])
+    // }
 
-    const onClickDelete = (dataId) => {
+    // const onClickDelete = (dataId) => {
         
-        onDelete(prev => prev.filter(data => data.id !== dataId))
-
-    }
+    //     onDelete(prev => prev.filter(data => data.id !== dataId))
+    // }
 
 
     return(
@@ -55,7 +54,7 @@ export const ReuseableTable = ({label,data,onDelete}) => {
                                         {data.name} / {data.name_km}
                                     </th>
                                     <td class="px-6 py-4">
-                                        <a onClick={() => onEdit(data.id)} className="text-blue-500 font-bold">Edit</a> / <a onClick={() => onClickDelete(data.id)} className="text-red-600 font-bold">Delete</a>
+                                        <a onClick={() => onEdit(data)} className="text-blue-500 font-bold">Edit</a> / <a onClick={() => onClickDelete(data.id)} className="text-red-600 font-bold">Delete</a>
                                     </td>
                                 </tr>
 
@@ -67,7 +66,7 @@ export const ReuseableTable = ({label,data,onDelete}) => {
                 </tbody>
             </table>
             
-            <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp}/>
+            {/* <Modal data={viewDetail} onChangePopUp={setPopUp} isVisible={popUp}/> */}
 
         </div>
 

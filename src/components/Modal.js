@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Input } from "./Input";
 
-export const Modal = ({data,onChangePopUp,isVisible}) => {
+export const Modal = ({data,onChangePopUp,isVisible,onUpdate}) => {
 
     if(!isVisible){
         return null
@@ -41,7 +41,7 @@ export const Modal = ({data,onChangePopUp,isVisible}) => {
                     <Input label='Name' value={form.name} name='name' onChange={onChange}/> 
                     <Input label='Name Km' value={form.name_km} name='name_km' onChange={onChange}/> 
                     
-                    <button onClick={onEdit} className="bg-black mt-4 p-4 rounded-lg font-bold">Edit</button>     
+                    <button onClick={() => onUpdate(form)} className="bg-black mt-4 p-4 rounded-lg font-bold">Edit</button>     
 
                 </div>
 

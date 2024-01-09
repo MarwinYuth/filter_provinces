@@ -16,7 +16,6 @@ export const DistrictForm = ({onSave,provinces}) => {
     }
 
     const onClickSave = () => {
-
         onSave(form)
 
         setForm({province_id:'',name:'',name_km:''})

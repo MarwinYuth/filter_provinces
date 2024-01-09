@@ -31,8 +31,6 @@ export const CommunesForm = ({onSave,provinces,districts}) => {
 
         setDistrictData([])
         setForm({district_id:'',name:'',name_km:''})
-
-        console.log(form);
     }
 
     return(
