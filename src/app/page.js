@@ -45,11 +45,10 @@ export default function Home() {
       };
 
       return result;
+
     });
 
   }, [provinces, districts, communes, villages]);
-
-  console.log(provinces);
 
   const onSaveProvince = (param) => {
 
@@ -87,7 +86,6 @@ export default function Home() {
   const onSaveCommune = (param) => {
     const id = uuidv4()
 
-
     setCommunes(prev => {
 
       prev.push({
@@ -119,8 +117,9 @@ export default function Home() {
 
 
   const onDeleteProvince = (param) => {
+
     const provinceId = param.province.id
-    setProvinces(prev => prev.filter(pro => pro.id !== provinceId))
+    setProvinces(provinces.filter((province) => province.id !== provinceId));
   
     setDistricts(districts.filter(dis => dis.province_id !== provinceId));
 
@@ -138,7 +137,9 @@ export default function Home() {
     setCommunes(prev => prev.filter(com => com.district_id !== districtId))
     const communeData = communes.find(com => com.district_id === districtId)
 
-    setVillages(prev => prev.filter(vil => vil.commune_id !== communeData.id))
+    if(communeData){
+      setVillages(prev => prev.filter(vil => vil.commune_id !== communeData.id))
+    }
   }
 
   const onDeleteCommune = (param) => {
@@ -153,17 +154,11 @@ export default function Home() {
     setVillages(prev => prev.filter(vil => vil.id !== villageId))
   }
 
-
   const testButton = () => {
-
     console.log(provinces);
-
     console.log(districts);
-
-    console.log(communes);
-
-    console.log(villages)
-
+    console.log(communes)
+    console.log(villages);
   }
 
   return (

@@ -35,10 +35,11 @@ export const VillageForm = ({onSave,communes,provinces,districts}) => {
     }
 
     const onSaveVillage = () => {
-
+        if(form.commune_id === '' || form.name === '' || form.name_km === ''){
+            return null
+        }
         onSave(form)
 
-        
         setDistrictData([])
         setCommuneData([])
         setForm({commune_id:'',name:'',name_km:''})

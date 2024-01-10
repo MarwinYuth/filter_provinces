@@ -27,10 +27,13 @@ export const CommunesForm = ({onSave,provinces,districts}) => {
 
     const onClickSave = () => {
 
+        if(form.district_id === '' || form.name === '' || form.name_km === ''){
+            return null
+        }
+        setForm({district_id:'',name:'',name_km:''})
         onSave(form)
 
         setDistrictData([])
-        setForm({district_id:'',name:'',name_km:''})
     }
 
     return(

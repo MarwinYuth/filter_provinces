@@ -13,9 +13,7 @@ export const Table = ({data,onDelete}) => {
     }
 
     return(
-
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-14">
-
 
             <h1 className="text-[30px] font-bold">Provinces Data</h1>
 
@@ -48,9 +46,9 @@ export const Table = ({data,onDelete}) => {
 
                             return(
 
-                                <tr key={data.id} class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {data.province.name} / {data.province.name_km}
+                                        {data?.province?.name} / {data?.province?.name_km}
                                     </th>
                                     <td class="px-6 py-4">
                                         {data?.totalDistricts}
@@ -75,9 +73,7 @@ export const Table = ({data,onDelete}) => {
 
             <Modal data={viewEdit} onChangePopUp={setPopUp} isVisible={popUp}/>
             
-
         </div>
-
     )
 
 }

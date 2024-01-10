@@ -17,7 +17,9 @@ export const ProvinceForm = ({onSave,onEdit}) => {
         setForm({...form,[field]:value})
     }
 
-    const onClickSave = () => {
+    const onClickSave = (e) => {
+
+        e.preventDefault()
 
         if(form.name === '' || form.name_km === ''){
             return null
@@ -38,7 +40,7 @@ export const ProvinceForm = ({onSave,onEdit}) => {
                 <Input label='Name Latin' name='name' placeholder='Name Latin' value={form.name} onChange={onChange}/>
                 <Input label='Name Khmer' name='name_km' placeholder='Name km' value={form.name_km} onChange={onChange}/>
                 
-                <button onClick={onClickSave} class="h-10 px-6 font-semibold rounded-md bg-white text-black mt-2" type="button">
+                <button onClick={onClickSave} class="h-10 px-6 font-semibold rounded-md bg-white text-black mt-2" type="submit">
                     Submit
                 </button>
 
